@@ -1,3 +1,4 @@
+import asyncHandler from "../lib/asyncHandler"; // Async Handler (wrapper for async functions)
 import { Request, Response } from "express";
 import { sign } from "jsonwebtoken";
 import { generate } from "otp-generator";
@@ -8,23 +9,23 @@ import User from "../models/User";
 import Otp from "../models/Otp";
 
 /** @description Verifying User */
-export const verifyUser = async (req: Request, res: Response): Promise<void> => {
+export const verifyUser = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const {email} = req.body;
 
     // Check if user exists
     const user = await User.findOne({email});
 
     if (!user) {
-        res.status(404).json({message: "User not found"});
-        return;
+        res.status(404);
+        res.json({message: "User not found"});
     }
 
 
     res.status(200).json({success:true, message: "User found"});
-}
+})
 
 /** @description Send OTP */
-export const sendOtp = async (req: Request, res:Response): Promise<void> => {
+export const sendOtp = asyncHandler(async (req: Request, res:Response): Promise<void> => {
     const {email} = req.body;
 
     // Check if OTP already exists
@@ -50,10 +51,10 @@ export const sendOtp = async (req: Request, res:Response): Promise<void> => {
     }
 
     res.status(200).json({success: true, message: "OTP sent successfully"});
-}
+})
 
 /** @description Verify OTP */
-export const verifyOtp = async (req: Request, res: Response): Promise<void> => {
+export const verifyOtp = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const {email, otp} = req.body;
 
     // Check if OTP exists
@@ -72,7 +73,7 @@ export const verifyOtp = async (req: Request, res: Response): Promise<void> => {
     await storedOtp?.deleteOne();
 
     res.status(200).json({success: true, message: "OTP verified successfully"});
-}
+})
 
 /** @description SignUp User */
 export const signUp = async (req:Request, res:Response): Promise<void> => {
@@ -85,7 +86,7 @@ export const signUp = async (req:Request, res:Response): Promise<void> => {
 }
 
 /** @description Login User */
-export const login = async (req:Request, res:Response): Promise<void> => {
+export const login = asyncHandler(async (req:Request, res:Response): Promise<void> => {
     const {email} = req.body;
 
     // Check if user exists
@@ -99,5 +100,5 @@ export const login = async (req:Request, res:Response): Promise<void> => {
     const token = sign({user}, process.env.JWT_SECRET as string, {expiresIn: "12h"});
 
     res.status(200).json({success: true, message: "User logged in successfully", token});
-}
+})
 
