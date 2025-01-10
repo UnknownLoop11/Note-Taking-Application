@@ -1,4 +1,4 @@
-import { Schema, Model } from "mongoose";
+import mongoose, { Schema, Document  } from "mongoose";
 
 const NoteSchema: Schema = new Schema({
     title: {
@@ -11,4 +11,11 @@ const NoteSchema: Schema = new Schema({
     }}
 , {timestamps: true});
 
-export default new Model('Note', NoteSchema);
+export interface NoteDocument extends Document {
+    title: string;
+    content: string;
+}
+
+const Note = mongoose.model<NoteDocument>('Note', NoteSchema);
+
+export default Note;

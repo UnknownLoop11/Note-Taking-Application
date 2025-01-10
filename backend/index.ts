@@ -1,5 +1,4 @@
 import express, { Express, Request, Response } from "express";
-import session from "express-session";
 import morgan from "morgan";
 import { config } from "dotenv";
 import connectDB from "./lib/db";
@@ -13,16 +12,6 @@ connectDB(); // Connecting to MongoDB
 const app: Express = express();
 app.use(morgan("dev")); // Logging middleware
 app.use(express.json()); // Body parser middleware
-app.use(session({
-    secret: process.env.SECRET_KEY || 'secret',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        maxAge: 1000 * 60 *5 , // 5 minutes
-        secure: false,
-        httpOnly: true,
-    }
-})); // Session middleware
 
 // Routes
 import authRoutes from "./routes/authRoutes";
