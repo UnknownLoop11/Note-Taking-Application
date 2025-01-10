@@ -18,16 +18,21 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge: 1000 * 60 * 60, // 1 hour
+        maxAge: 1000 * 60 *5 , // 5 minutes
         secure: false,
-        httpOnly: true
+        httpOnly: true,
     }
 })); // Session middleware
 
+// Routes
+import authRoutes from "./routes/authRoutes";
 app.get("/", (req: Request, res: Response) => {
-    throw new Error("This is an error");
     res.send("Hello World");
 });
+app.use("/api/auth", authRoutes);
+
+
+
 
 // Error Handler Middleware
 app.use(errorHandler);
