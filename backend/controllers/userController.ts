@@ -17,7 +17,7 @@ export const getUser = asyncHandler(async (req: Request, res: Response): Promise
 
     const {_id: userId} = req.body.user;
 
-    const user = await User.findById(userId);
+    const user = await User.findOne(userId);
 
     if (!user) {
         throw {message: "User not found", statusCode: 404};
