@@ -16,14 +16,14 @@ app.use(express.json()); // Body parser middleware
 // Routes
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
+import noteRoutes from "./routes/noteRoutes";
+
 app.get("/", (req: Request, res: Response) => {
     res.send("Hello World");
 });
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-
-
-
+app.use("/api/notes", noteRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);

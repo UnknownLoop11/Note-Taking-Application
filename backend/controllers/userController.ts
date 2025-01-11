@@ -20,9 +20,7 @@ export const getUser = asyncHandler(async (req: Request, res: Response): Promise
     const user = await User.findById(userId);
 
     if (!user) {
-        res.status(404)
-        .json({message: "User not found"});
-        return
+        throw {message: "User not found", statusCode: 404};
     }
 
     res.status(200).json({success: true, user});

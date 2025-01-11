@@ -16,8 +16,7 @@ export const verifyUser = asyncHandler(async (req: Request, res: Response): Prom
     const user = await User.findOne({email});
 
     if (!user) {
-        res.status(404);
-        res.json({message: "User not found"});
+        throw { message: "User not found", statusCode: 404 };
     }
 
 
@@ -46,8 +45,7 @@ export const sendOtp = asyncHandler(async (req: Request, res:Response): Promise<
 
     }
     catch (error) {
-        res.status(500).json({message: "Error sending OTP"});
-        return;
+        throw {message: "Error sending OTP", statusCode: 500, details: error};
     }
 
     res.status(200).json({success: true, message: "OTP sent successfully"});
@@ -61,12 +59,11 @@ export const verifyOtp = asyncHandler(async (req: Request, res: Response): Promi
     const storedOtp = await Otp.findOne({email});
 
     if (!storedOtp) {
-        res.status(404).json({message: "OTP expired"});
-        return;
+        throw {message: "OTP expired", statusCode: 404};
     }
 
     if (storedOtp?.otp !== otp) {
-        res.status(400).json({message: "Invalid OTP"});
+        throw {message: "Invalid OTP", statusCode: 400};
     }
 
     // Delete OTP from database
@@ -93,7 +90,7 @@ export const login = asyncHandler(async (req:Request, res:Response): Promise<voi
     const user = await User.findOne({email});
 
     if (!user) {
-        res.status(404).json({message: "User not found"});
+        throw {message: "User not found", statusCode: 404};
     }
 
     // Generate JWT
